@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault - Upload Document</title>
+    <!-- FontAwesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/upload.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- ✅ Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h2>TrustVault</h2>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li><a href="dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                    <li class="active"><a href="documents.html"><i class="fa-solid fa-file-lines"></i> Documents</a></li>
+                    <li><a href="#"><i class="fa-solid fa-file-signature"></i> Contracts</a></li>
+                    <li><a href="#"><i class="fa-solid fa-comments"></i> Chat</a></li>
+                    <li><a href="#"><i class="fa-solid fa-bell"></i> Notifications</a></li>
+                    <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- 🔍 Top Bar (Search & User Profile) -->
+            <header class="top-bar">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Search files, contracts, or users...">
+                </div>
+                <div class="user-wrapper">
+                    <div class="user-info">
+                        <h4>User Name</h4>
+                        <small>Administrator</small>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User Profile" class="user-avatar">
+                </div>
+            </header>
+
+            <!-- 📤 Main Content Inner -->
+            <div class="content-body upload-content">
+                <!-- Upload Form Container -->
+                <div class="upload-form-container">
+                    <!-- Form Header -->
+                    <div class="upload-form-header">
+                        <h1><i class="fa-solid fa-cloud-arrow-up"></i> Upload Document</h1>
+                        <p>Securely upload and organize your important documents</p>
+                    </div>
+
+                    <!-- Upload Form -->
+                    <form class="upload-form" id="uploadForm">
+                        <!-- 📤 Drag & Drop Zone -->
+                        <div class="drag-drop-zone" id="dragDropZone">
+                            <div class="zone-content">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <h2>Drag and drop your document here</h2>
+                                <p>or</p>
+                                <button type="button" class="btn-browse">
+                                    <i class="fa-solid fa-folder-open"></i> Browse Files
+                                </button>
+                                <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt,.jpg,.png" hidden>
+                            </div>
+                            <div class="zone-preview" id="zonePreview" style="display: none;">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <p id="previewText">File selected</p>
+                            </div>
+                        </div>
+
+                        <!-- Form Fields -->
+                        <div class="form-fields">
+                            <!-- Document Name Input -->
+                            <div class="form-group">
+                                <label for="docName" class="form-label">
+                                    <i class="fa-solid fa-file"></i> Document Name
+                                    <span class="required">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="docName" 
+                                    class="form-input" 
+                                    placeholder="Enter document name (e.g., Passport 2024)"
+                                    required>
+                                <small class="form-help">Give your document a meaningful name</small>
+                            </div>
+
+                            <!-- Category Select -->
+                            <div class="form-group">
+                                <label for="docCategory" class="form-label">
+                                    <i class="fa-solid fa-tag"></i> Category
+                                    <span class="required">*</span>
+                                </label>
+                                <select id="docCategory" class="form-select" required>
+                                    <option value="">Select a category</option>
+                                    <option value="identity">Identity Documents</option>
+                                    <option value="financial">Financial Documents</option>
+                                    <option value="legal">Legal Documents</option>
+                                    <option value="ownership">Ownership Documents</option>
+                                    <option value="medical">Medical Records</option>
+                                    <option value="education">Education & Certificates</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Description Textarea -->
+                            <div class="form-group">
+                                <label for="docDescription" class="form-label">
+                                    <i class="fa-solid fa-align-left"></i> Description
+                                </label>
+                                <textarea 
+                                    id="docDescription" 
+                                    class="form-textarea" 
+                                    placeholder="Add any additional notes or details about this document..."
+                                    rows="4"></textarea>
+                                <small class="form-help">Optional: Add notes about the document</small>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-actions">
+                            <a href="documents.html" class="btn-cancel">
+                                <i class="fa-solid fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn-submit">
+                                <i class="fa-solid fa-check"></i> Upload Document
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Upload Progress (Hidden by default) -->
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-content">
+                        <div class="progress-header">
+                            <h3>Uploading...</h3>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p id="progressStatus">Initializing upload...</p>
+                    </div>
+                </div>
+
+                <!-- Success Message (Hidden by default) -->
+                <div class="upload-success" id="uploadSuccess" style="display: none;">
+                    <div class="success-content">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <h2>Document Uploaded Successfully!</h2>
+                        <p id="successMessage">Your document has been securely stored.</p>
+                        <div class="success-actions">
+                            <a href="documents.html" class="btn-view-docs">
+                                <i class="fa-solid fa-file-lines"></i> View Documents
+                            </a>
+                            <button type="button" class="btn-upload-more" id="uploadMoreBtn">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Upload Another
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/upload.js"></script>
+</body>
+</html>

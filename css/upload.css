@@ -1,0 +1,516 @@
+/* ============================================
+   UPLOAD PAGE STYLING
+   ============================================ */
+
+/* Upload Content Container */
+.upload-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 70px);
+    padding: 40px 20px;
+}
+
+/* Upload Form Container */
+.upload-form-container {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Form Header */
+.upload-form-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.upload-form-header h1 {
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.upload-form-header h1 i {
+    font-size: 32px;
+}
+
+.upload-form-header p {
+    font-size: 14px;
+    opacity: 0.95;
+}
+
+/* Upload Form */
+.upload-form {
+    padding: 32px 24px;
+}
+
+/* ============================================
+   DRAG & DROP ZONE
+   ============================================ */
+
+.drag-drop-zone {
+    border: 2px dashed #cbd5e0;
+    border-radius: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 32px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.drag-drop-zone:hover {
+    border-color: #667eea;
+    background-color: #f0f4ff;
+}
+
+.drag-drop-zone.dragover {
+    border-color: #667eea;
+    background-color: #ede9fe;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Zone Content */
+.zone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.zone-content i {
+    font-size: 48px;
+    color: #667eea;
+}
+
+.zone-content h2 {
+    font-size: 18px;
+    color: #2d3748;
+    margin-bottom: 8px;
+}
+
+.zone-content p {
+    color: #718096;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Browse Button */
+.btn-browse {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: #667eea;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-browse:hover {
+    background-color: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* Zone Preview */
+.zone-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.zone-preview i {
+    font-size: 48px;
+    color: #10b981;
+}
+
+.zone-preview p {
+    color: #10b981;
+    font-weight: 600;
+}
+
+/* File Input */
+.file-input {
+    display: none;
+}
+
+/* ============================================
+   FORM FIELDS
+   ============================================ */
+
+.form-fields {
+    margin-bottom: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Form Labels */
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 8px;
+}
+
+.form-label i {
+    font-size: 16px;
+    color: #667eea;
+}
+
+.required {
+    color: #dc2626;
+}
+
+/* Form Inputs */
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #2d3748;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    background-color: #f8f9ff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: #a0aec0;
+}
+
+/* Form Textarea */
+.form-textarea {
+    resize: vertical;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Form Help Text */
+.form-help {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #718096;
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.btn-cancel,
+.btn-submit {
+    flex: 1;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-cancel {
+    background-color: #e2e8f0;
+    color: #2d3748;
+}
+
+.btn-cancel:hover {
+    background-color: #cbd5e0;
+}
+
+.btn-submit {
+    background-color: #667eea;
+    color: #ffffff;
+}
+
+.btn-submit:hover {
+    background-color: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.btn-submit:disabled {
+    background-color: #cbd5e0;
+    color: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================
+   UPLOAD PROGRESS
+   ============================================ */
+
+.upload-progress {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 32px;
+    text-align: center;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.progress-header h3 {
+    font-size: 18px;
+    color: #2d3748;
+    margin: 0;
+}
+
+#progressPercent {
+    font-size: 16px;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 10px;
+}
+
+#progressStatus {
+    font-size: 14px;
+    color: #718096;
+    margin: 0;
+}
+
+/* ============================================
+   SUCCESS MESSAGE
+   ============================================ */
+
+.upload-success {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 48px 32px;
+    text-align: center;
+}
+
+.success-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.success-content i {
+    font-size: 64px;
+    color: #10b981;
+    animation: scaleIn 0.5s ease forwards;
+}
+
+.success-content h2 {
+    font-size: 24px;
+    color: #2d3748;
+    margin: 0;
+}
+
+#successMessage {
+    font-size: 14px;
+    color: #718096;
+    margin: 0;
+}
+
+.success-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-view-docs,
+.btn-upload-more {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-view-docs {
+    background-color: #667eea;
+    color: #ffffff;
+}
+
+.btn-view-docs:hover {
+    background-color: #5568d3;
+}
+
+.btn-upload-more {
+    background-color: #e2e8f0;
+    color: #2d3748;
+}
+
+.btn-upload-more:hover {
+    background-color: #cbd5e0;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 600px) {
+    .upload-content {
+        padding: 20px;
+    }
+
+    .upload-form-header {
+        padding: 24px 16px;
+    }
+
+    .upload-form-header h1 {
+        font-size: 22px;
+    }
+
+    .upload-form {
+        padding: 20px 16px;
+    }
+
+    .drag-drop-zone {
+        padding: 24px 16px;
+        min-height: 160px;
+    }
+
+    .zone-content i {
+        font-size: 40px;
+    }
+
+    .zone-content h2 {
+        font-size: 16px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+    }
+
+    .success-actions {
+        flex-direction: column;
+    }
+
+    .btn-view-docs,
+    .btn-upload-more {
+        width: 100%;
+    }
+
+    .upload-success {
+        padding: 32px 20px;
+    }
+
+    .success-content i {
+        font-size: 48px;
+    }
+
+    .success-content h2 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .upload-form-container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .form-label {
+        font-size: 13px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        font-size: 16px;
+    }
+}

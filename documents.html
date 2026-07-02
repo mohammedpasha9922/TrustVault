@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault - My Documents</title>
+    <!-- FontAwesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/documents.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- ✅ Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h2>TrustVault</h2>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li><a href="dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                    <li class="active"><a href="documents.html"><i class="fa-solid fa-file-lines"></i> Documents</a></li>
+                    <li><a href="#"><i class="fa-solid fa-file-signature"></i> Contracts</a></li>
+                    <li><a href="#"><i class="fa-solid fa-comments"></i> Chat</a></li>
+                    <li><a href="#"><i class="fa-solid fa-bell"></i> Notifications</a></li>
+                    <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- 🔍 Top Bar (Search & User Profile) -->
+            <header class="top-bar">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Search files, contracts, or users...">
+                </div>
+                <div class="user-wrapper">
+                    <div class="user-info">
+                        <h4>User Name</h4>
+                        <small>Administrator</small>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User Profile" class="user-avatar">
+                </div>
+            </header>
+
+            <!-- 📄 Main Content Inner -->
+            <div class="content-body">
+                <!-- 📄 Documents Header -->
+                <section class="documents-header">
+                    <div class="header-title">
+                        <h1><i class="fa-solid fa-file-lines"></i> My Documents</h1>
+                        <p>Manage and organize all your important documents in one secure place</p>
+                    </div>
+                    <a href="upload.html" class="btn-upload">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Upload Document
+                    </a>
+                </section>
+
+                <!-- 📋 Document Cards Grid -->
+                <section class="documents-grid">
+                    <!-- Document Card 1: Passport -->
+                    <div class="document-card">
+                        <div class="card-header">
+                            <div class="file-icon passport-icon">
+                                <i class="fa-solid fa-passport"></i>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn" title="More options">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3>Passport.pdf</h3>
+                            <p class="file-size">2.4 MB</p>
+                            <div class="card-tags">
+                                <span class="tag identity">Identity</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-action view-btn">
+                                <i class="fa-solid fa-eye"></i> View
+                            </button>
+                            <button class="btn-action download-btn">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Document Card 2: ID -->
+                    <div class="document-card">
+                        <div class="card-header">
+                            <div class="file-icon id-icon">
+                                <i class="fa-solid fa-id-card"></i>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn" title="More options">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3>ID.pdf</h3>
+                            <p class="file-size">1.8 MB</p>
+                            <div class="card-tags">
+                                <span class="tag identity">Identity</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-action view-btn">
+                                <i class="fa-solid fa-eye"></i> View
+                            </button>
+                            <button class="btn-action download-btn">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Document Card 3: Bank -->
+                    <div class="document-card">
+                        <div class="card-header">
+                            <div class="file-icon bank-icon">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn" title="More options">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3>Bank.pdf</h3>
+                            <p class="file-size">3.2 MB</p>
+                            <div class="card-tags">
+                                <span class="tag financial">Financial</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-action view-btn">
+                                <i class="fa-solid fa-eye"></i> View
+                            </button>
+                            <button class="btn-action download-btn">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Document Card 4: House Contract -->
+                    <div class="document-card">
+                        <div class="card-header">
+                            <div class="file-icon contract-icon">
+                                <i class="fa-solid fa-home"></i>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn" title="More options">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3>House Contract.pdf</h3>
+                            <p class="file-size">5.6 MB</p>
+                            <div class="card-tags">
+                                <span class="tag legal">Legal</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-action view-btn">
+                                <i class="fa-solid fa-eye"></i> View
+                            </button>
+                            <button class="btn-action download-btn">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Document Card 5: Car -->
+                    <div class="document-card">
+                        <div class="card-header">
+                            <div class="file-icon vehicle-icon">
+                                <i class="fa-solid fa-car"></i>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn" title="More options">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3>Car.pdf</h3>
+                            <p class="file-size">4.1 MB</p>
+                            <div class="card-tags">
+                                <span class="tag ownership">Ownership</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-action view-btn">
+                                <i class="fa-solid fa-eye"></i> View
+                            </button>
+                            <button class="btn-action download-btn">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/documents.js"></script>
+</body>
+</html>

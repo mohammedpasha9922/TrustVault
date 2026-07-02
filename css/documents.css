@@ -1,0 +1,299 @@
+/* ============================================
+   DOCUMENTS PAGE STYLING
+   ============================================ */
+
+/* Documents Header Section */
+.documents-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding: 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+}
+
+.header-title h1 {
+    color: #ffffff;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.header-title h1 i {
+    font-size: 32px;
+}
+
+.header-title p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+}
+
+/* Upload Button */
+.btn-upload {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: #ffffff;
+    color: #667eea;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-upload:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-upload i {
+    font-size: 16px;
+}
+
+/* Documents Grid */
+.documents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+/* Document Card Styling */
+.document-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.document-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+/* Card Header with Icon and Actions */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* File Icons with Different Colors */
+.file-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.passport-icon {
+    background-color: #e3f2fd;
+    color: #1e88e5;
+}
+
+.id-icon {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.bank-icon {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.contract-icon {
+    background-color: #fce4ec;
+    color: #c2185b;
+}
+
+.vehicle-icon {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+/* Action Buttons */
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    background-color: transparent;
+    border: none;
+    color: #a0aec0;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background-color: #e2e8f0;
+    color: #2d3748;
+}
+
+/* Card Body */
+.card-body {
+    padding: 20px;
+    flex: 1;
+}
+
+.card-body h3 {
+    color: #2d3748;
+    font-size: 16px;
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+
+.file-size {
+    color: #a0aec0;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+/* Tags/Categories */
+.card-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.tag.identity {
+    background-color: #e3f2fd;
+    color: #1e88e5;
+}
+
+.tag.financial {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.tag.legal {
+    background-color: #fce4ec;
+    color: #c2185b;
+}
+
+.tag.ownership {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+/* Card Footer with Action Buttons */
+.card-footer {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #edf2f7;
+}
+
+.btn-action {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    color: #4a5568;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-action:hover {
+    background-color: #f0f4f8;
+    border-color: #cbd5e0;
+}
+
+.view-btn:hover {
+    color: #1e88e5;
+    border-color: #1e88e5;
+}
+
+.download-btn:hover {
+    color: #388e3c;
+    border-color: #388e3c;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .documents-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .header-title h1 {
+        font-size: 24px;
+        justify-content: center;
+    }
+
+    .btn-upload {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .documents-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+    }
+
+    .card-footer {
+        flex-direction: column;
+    }
+
+    .btn-action {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .documents-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header-title h1 {
+        font-size: 20px;
+    }
+
+    .card-header {
+        padding: 16px;
+    }
+
+    .card-body {
+        padding: 16px;
+    }
+
+    .card-footer {
+        padding: 12px 16px;
+    }
+}

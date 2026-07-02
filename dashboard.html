@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault - Dashboard</title>
+    <!-- FontAwesome لأيقونات احترافية وسريعة -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ملفات الستايل -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- ✅ Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h2>TrustVault</h2>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li class="active"><a href="dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                    <li><a href="documents.html"><i class="fa-solid fa-file-lines"></i> Documents</a></li>
+                    <li><a href="#"><i class="fa-solid fa-file-signature"></i> Contracts</a></li>
+                    <li><a href="#"><i class="fa-solid fa-comments"></i> Chat</a></li>
+                    <li><a href="#"><i class="fa-solid fa-bell"></i> Notifications</a></li>
+                    <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- 🔍 Top Bar (Search & User Profile) -->
+            <header class="top-bar">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Search files, contracts, or users...">
+                </div>
+                <div class="user-wrapper">
+                    <div class="user-info">
+                        <h4>User Name</h4>
+                        <small>Administrator</small>
+                    </div>
+                    <!-- صورة مستخدم افتراضية لحين وضع صورتك الخاصة في مجلد assets -->
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User Profile" class="user-avatar">
+                </div>
+            </header>
+
+            <!-- 📊 Main Content Inner -->
+            <div class="content-body">
+                <!-- 4 Cards -->
+                <section class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon doc-icon"><i class="fa-solid fa-file-lines"></i></div>
+                        <div class="card-info">
+                            <h3>124</h3>
+                            <p>Documents</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon contract-icon"><i class="fa-solid fa-file-signature"></i></div>
+                        <div class="card-info">
+                            <h3>42</h3>
+                            <p>Contracts</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon alert-icon"><i class="fa-solid fa-bell"></i></div>
+                        <div class="card-info">
+                            <h3>8</h3>
+                            <p>Notifications</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon user-icon"><i class="fa-solid fa-users"></i></div>
+                        <div class="card-info">
+                            <h3>15</h3>
+                            <p>Users</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 📑 Table (Latest Contracts) -->
+                <section class="table-container">
+                    <div class="table-header">
+                        <h3>Latest Contracts</h3>
+                        <a href="#" class="btn-view-all">View All</a>
+                    </div>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Contract</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Material Supply Agreement</td>
+                                <td><span class="status status-signed">Signed</span></td>
+                                <td>2026-07-01</td>
+                            </tr>
+                            <tr>
+                                <td>Logistics Services Contract</td>
+                                <td><span class="status status-pending">Pending</span></td>
+                                <td>2026-06-28</td>
+                            </tr>
+                            <tr>
+                                <td>Partnership NDAs</td>
+                                <td><span class="status status-signed">Signed</span></td>
+                                <td>2026-06-25</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
