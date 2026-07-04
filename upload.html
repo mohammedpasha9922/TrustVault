@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrustVault - Upload Document</title>
-    <!-- FontAwesome for professional icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Style Files -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/upload.css">
 </head>
 <body>
-
     <div class="dashboard-container">
-        <!-- ✅ Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-brand">
                 <i class="fa-solid fa-shield-halved"></i>
@@ -32,9 +28,7 @@
             </nav>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="main-content">
-            <!-- 🔍 Top Bar (Search & User Profile) -->
             <header class="top-bar">
                 <div class="search-wrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -49,19 +43,14 @@
                 </div>
             </header>
 
-            <!-- 📤 Main Content Inner -->
             <div class="content-body upload-content">
-                <!-- Upload Form Container -->
                 <div class="upload-form-container">
-                    <!-- Form Header -->
                     <div class="upload-form-header">
                         <h1><i class="fa-solid fa-cloud-arrow-up"></i> Upload Document</h1>
                         <p>Securely upload and organize your important documents</p>
                     </div>
 
-                    <!-- Upload Form -->
                     <form class="upload-form" id="uploadForm">
-                        <!-- 📤 Drag & Drop Zone -->
                         <div class="drag-drop-zone" id="dragDropZone">
                             <div class="zone-content">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -78,24 +67,18 @@
                             </div>
                         </div>
 
-                        <!-- Form Fields -->
+                        <p class="form-help">Uploads are stored locally in this browser for the demo experience.</p>
+
                         <div class="form-fields">
-                            <!-- Document Name Input -->
                             <div class="form-group">
                                 <label for="docName" class="form-label">
                                     <i class="fa-solid fa-file"></i> Document Name
                                     <span class="required">*</span>
                                 </label>
-                                <input 
-                                    type="text" 
-                                    id="docName" 
-                                    class="form-input" 
-                                    placeholder="Enter document name (e.g., Passport 2024)"
-                                    required>
+                                <input type="text" id="docName" class="form-input" placeholder="Enter document name (e.g., Passport 2024)" required>
                                 <small class="form-help">Give your document a meaningful name</small>
                             </div>
 
-                            <!-- Category Select -->
                             <div class="form-group">
                                 <label for="docCategory" class="form-label">
                                     <i class="fa-solid fa-tag"></i> Category
@@ -113,21 +96,15 @@
                                 </select>
                             </div>
 
-                            <!-- Description Textarea -->
                             <div class="form-group">
                                 <label for="docDescription" class="form-label">
                                     <i class="fa-solid fa-align-left"></i> Description
                                 </label>
-                                <textarea 
-                                    id="docDescription" 
-                                    class="form-textarea" 
-                                    placeholder="Add any additional notes or details about this document..."
-                                    rows="4"></textarea>
+                                <textarea id="docDescription" class="form-textarea" placeholder="Add any additional notes or details about this document..." rows="4"></textarea>
                                 <small class="form-help">Optional: Add notes about the document</small>
                             </div>
                         </div>
 
-                        <!-- Action Buttons -->
                         <div class="form-actions">
                             <a href="documents.html" class="btn-cancel">
                                 <i class="fa-solid fa-times"></i> Cancel
@@ -139,7 +116,6 @@
                     </form>
                 </div>
 
-                <!-- Upload Progress (Hidden by default) -->
                 <div class="upload-progress" id="uploadProgress" style="display: none;">
                     <div class="progress-content">
                         <div class="progress-header">
@@ -153,7 +129,6 @@
                     </div>
                 </div>
 
-                <!-- Success Message (Hidden by default) -->
                 <div class="upload-success" id="uploadSuccess" style="display: none;">
                     <div class="success-content">
                         <i class="fa-solid fa-circle-check"></i>
