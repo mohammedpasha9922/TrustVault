@@ -2,15 +2,16 @@
 // DOCUMENTS PAGE FUNCTIONALITY
 // ============================================
 
+let currentQuery = '';
+
 document.addEventListener('DOMContentLoaded', function () {
     initializeDocumentsPage();
 });
 
 function initializeDocumentsPage() {
+    addDocumentStyles();
     setupSearch();
     renderDocuments(TrustVaultStorage.getDocuments());
-    setupCardActions();
-    addDocumentStyles();
 }
 
 function setupSearch() {
@@ -21,9 +22,8 @@ function setupSearch() {
     }
 
     searchInput.addEventListener('input', function (event) {
-        const query = event.target.value.trim().toLowerCase();
-        const documents = TrustVaultStorage.getDocuments();
-        const filteredDocuments = filterDocuments(documents, query);
+        currentQuery = event.target.value.trim().toLowerCase();
+        const filteredDocuments = filterDocuments(TrustVaultStorage.getDocuments(), currentQuery);
         renderDocuments(filteredDocuments);
     });
 }
@@ -37,9 +37,9 @@ function filterDocuments(documents, query) {
         const haystack = [
             documentItem.documentName,
             documentItem.fileName,
-            documentItem.description,
             documentItem.category,
-            documentItem.uploadTime
+            documentItem.description,
+            documentItem.uploadedAt
         ].join(' ').toLowerCase();
 
         return haystack.includes(query);
@@ -47,7 +47,7 @@ function filterDocuments(documents, query) {
 }
 
 function renderDocuments(documents) {
-    const grid = document.querySelector('.documents-grid');
+    const grid = document.getElementById('documentsGrid');
 
     if (!grid) {
         return;
@@ -56,7 +56,7 @@ function renderDocuments(documents) {
     grid.innerHTML = '';
 
     if (!documents.length) {
-        grid.innerHTML = '<div class="empty-state">No documents matched your search.</div>';
+        grid.innerHTML = '<div class="empty-state">No documents found. Upload one to get started.</div>';
         return;
     }
 
@@ -67,7 +67,7 @@ function renderDocuments(documents) {
 
 function createDocumentCard(documentItem) {
     const categoryInfo = getCategoryInfo(documentItem.category);
-    const card = document.createElement('div');
+    const card = document.createElement('article');
     card.className = 'document-card';
 
     card.innerHTML = [
@@ -75,30 +75,36 @@ function createDocumentCard(documentItem) {
         '  <div class="file-icon ' + categoryInfo.iconClass + '">',
         '    <i class="' + categoryInfo.icon + '"></i>',
         '  </div>',
-        '  <div class="card-actions">',
-        '    <button class="action-btn" type="button" data-action="menu" data-id="' + documentItem.id + '" data-name="' + escapeHtml(documentItem.documentName || documentItem.fileName) + '" title="More options">',
-        '      <i class="fa-solid fa-ellipsis-vertical"></i>',
-        '    </button>',
-        '  </div>',
         '</div>',
         '<div class="card-body">',
         '  <h3>' + escapeHtml(documentItem.documentName || documentItem.fileName) + '</h3>',
-        '  <p class="file-size">' + escapeHtml(documentItem.fileName) + ' • ' + formatFileSize(documentItem.fileSize) + '</p>',
+        '  <p class="file-size">' + escapeHtml(documentItem.fileName) + ' • ' + formatFileSize(documentItem.size) + '</p>',
         '  <div class="card-tags">',
         '    <span class="tag ' + categoryInfo.tagClass + '">' + categoryInfo.label + '</span>',
         '  </div>',
         documentItem.description ? '  <p class="card-description">' + escapeHtml(documentItem.description) + '</p>' : '',
-        '  <p class="card-meta">' + escapeHtml(documentItem.uploadTime || '') + '</p>',
+        '  <p class="card-meta">' + escapeHtml(documentItem.uploadedAt || '') + '</p>',
         '</div>',
         '<div class="card-footer">',
-        '  <button class="btn-action view-btn" type="button" data-action="view" data-id="' + documentItem.id + '">',
-        '    <i class="fa-solid fa-eye"></i> View',
+        '  <button class="btn-action edit-btn" type="button" data-action="edit" data-id="' + documentItem.id + '">',
+        '    <i class="fa-solid fa-pen"></i> Edit',
         '  </button>',
-        '  <button class="btn-action download-btn" type="button" data-action="download" data-id="' + documentItem.id + '">',
-        '    <i class="fa-solid fa-download"></i> Download',
+        '  <button class="btn-action delete-btn" type="button" data-action="delete" data-id="' + documentItem.id + '">',
+        '    <i class="fa-solid fa-trash"></i> Delete',
         '  </button>',
         '</div>'
     ].join('');
+
+    card.querySelector('.edit-btn').addEventListener('click', function () {
+        showEditModal(documentItem);
+    });
+
+    card.querySelector('.delete-btn').addEventListener('click', function () {
+        if (confirm('Delete this document?')) {
+            TrustVaultStorage.deleteDocument(documentItem.id);
+            renderDocuments(filterDocuments(TrustVaultStorage.getDocuments(), currentQuery));
+        }
+    });
 
     return card;
 }
@@ -128,119 +134,67 @@ function formatFileSize(bytes) {
     return size.toFixed(index === 0 ? 0 : 1) + ' ' + units[index];
 }
 
-function setupCardActions() {
-    const grid = document.querySelector('.documents-grid');
+function showEditModal(documentItem) {
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    modalOverlay.innerHTML = [
+        '<div class="modal-card">',
+        '  <h3>Edit Document</h3>',
+        '  <form id="editDocumentForm">',
+        '    <label class="modal-label">Name</label>',
+        '    <input type="text" id="editDocumentName" class="form-input" value="' + escapeHtml(documentItem.documentName || documentItem.fileName) + '">',
+        '    <label class="modal-label">Category</label>',
+        '    <select id="editDocumentCategory" class="form-select">',
+        '      <option value="identity" ' + (documentItem.category === 'identity' ? 'selected' : '') + '>Identity</option>',
+        '      <option value="financial" ' + (documentItem.category === 'financial' ? 'selected' : '') + '>Financial</option>',
+        '      <option value="legal" ' + (documentItem.category === 'legal' ? 'selected' : '') + '>Legal</option>',
+        '      <option value="ownership" ' + (documentItem.category === 'ownership' ? 'selected' : '') + '>Ownership</option>',
+        '      <option value="medical" ' + (documentItem.category === 'medical' ? 'selected' : '') + '>Medical</option>',
+        '      <option value="education" ' + (documentItem.category === 'education' ? 'selected' : '') + '>Education</option>',
+        '      <option value="other" ' + (documentItem.category === 'other' ? 'selected' : '') + '>Other</option>',
+        '    </select>',
+        '    <label class="modal-label">Description</label>',
+        '    <textarea id="editDocumentDescription" class="form-textarea" rows="4">' + escapeHtml(documentItem.description || '') + '</textarea>',
+        '    <div class="modal-actions">',
+        '      <button type="button" class="btn-cancel" data-close="true">Cancel</button>',
+        '      <button type="submit" class="btn-submit">Save</button>',
+        '    </div>',
+        '  </form>',
+        '</div>'
+    ].join('');
 
-    if (!grid) {
-        return;
-    }
+    document.body.appendChild(modalOverlay);
 
-    grid.addEventListener('click', function (event) {
-        const button = event.target.closest('button[data-action]');
+    modalOverlay.querySelector('[data-close="true"]').addEventListener('click', function () {
+        modalOverlay.remove();
+    });
 
-        if (!button) {
+    modalOverlay.addEventListener('click', function (event) {
+        if (event.target === modalOverlay) {
+            modalOverlay.remove();
+        }
+    });
+
+    modalOverlay.querySelector('#editDocumentForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const updatedName = document.getElementById('editDocumentName').value.trim();
+        const updatedCategory = document.getElementById('editDocumentCategory').value;
+        const updatedDescription = document.getElementById('editDocumentDescription').value.trim();
+
+        if (!updatedName) {
+            alert('Please enter a document name.');
             return;
         }
 
-        const action = button.getAttribute('data-action');
-        const id = button.getAttribute('data-id');
+        TrustVaultStorage.updateDocument(documentItem.id, {
+            documentName: updatedName,
+            category: updatedCategory,
+            description: updatedDescription
+        });
 
-        if (action === 'view') {
-            viewDocument(id);
-        } else if (action === 'download') {
-            downloadDocument(button, id);
-        } else if (action === 'menu') {
-            showContextMenu(button, id, button.getAttribute('data-name'));
-        }
-    });
-}
-
-function viewDocument(id) {
-    const documentItem = TrustVaultStorage.getDocumentById(id);
-
-    if (!documentItem) {
-        return;
-    }
-
-    alert('Opening "' + documentItem.documentName + '" for viewing...\n\nViewer feature coming soon!');
-}
-
-function downloadDocument(button, id) {
-    const documentItem = TrustVaultStorage.getDocumentById(id);
-
-    if (!button || !documentItem) {
-        return;
-    }
-
-    const originalHtml = button.innerHTML;
-    button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Downloading...';
-    button.disabled = true;
-
-    window.setTimeout(function () {
-        button.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #388e3c;"></i> Done!';
-        window.setTimeout(function () {
-            button.innerHTML = originalHtml;
-            button.disabled = false;
-        }, 1800);
-    }, 1000);
-}
-
-function showContextMenu(button, id, fileName) {
-    const existingMenus = document.querySelectorAll('.context-menu');
-    existingMenus.forEach(function (menu) {
-        menu.remove();
-    });
-
-    const menu = document.createElement('div');
-    menu.className = 'context-menu';
-    menu.innerHTML = [
-        '<button class="menu-item delete-item" type="button">',
-        '  <i class="fa-solid fa-trash"></i> Delete',
-        '</button>',
-        '<button class="menu-item share-item" type="button">',
-        '  <i class="fa-solid fa-share"></i> Share',
-        '</button>',
-        '<button class="menu-item rename-item" type="button">',
-        '  <i class="fa-solid fa-pen"></i> Rename',
-        '</button>'
-    ].join('');
-
-    document.body.appendChild(menu);
-
-    const rect = button.getBoundingClientRect();
-    menu.style.position = 'fixed';
-    menu.style.top = (rect.bottom + 8) + 'px';
-    menu.style.right = (window.innerWidth - rect.right) + 'px';
-
-    menu.querySelector('.delete-item').addEventListener('click', function () {
-        if (confirm('Are you sure you want to delete "' + fileName + '"?')) {
-            TrustVaultStorage.deleteDocument(id);
-            renderDocuments(TrustVaultStorage.getDocuments());
-        }
-        menu.remove();
-    });
-
-    menu.querySelector('.share-item').addEventListener('click', function () {
-        alert('Sharing "' + fileName + '" - Feature coming soon!');
-        menu.remove();
-    });
-
-    menu.querySelector('.rename-item').addEventListener('click', function () {
-        const newName = prompt('Rename "' + fileName + '" to:', fileName);
-
-        if (newName && newName.trim() && newName.trim() !== fileName) {
-            TrustVaultStorage.updateDocument(id, { documentName: newName.trim() });
-            renderDocuments(TrustVaultStorage.getDocuments());
-        }
-
-        menu.remove();
-    });
-
-    document.addEventListener('click', function closeMenu(event) {
-        if (!menu.contains(event.target) && event.target !== button) {
-            menu.remove();
-            document.removeEventListener('click', closeMenu);
-        }
+        modalOverlay.remove();
+        renderDocuments(filterDocuments(TrustVaultStorage.getDocuments(), currentQuery));
     });
 }
 
@@ -261,62 +215,53 @@ function addDocumentStyles() {
     const style = document.createElement('style');
     style.id = 'documents-page-styles';
     style.textContent = `
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-10px); }
-        }
-
-        .context-menu {
+        .document-card {
             background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            min-width: 160px;
-        }
-
-        .context-menu .menu-item {
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+        }
+
+        .card-header {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .card-body {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
             gap: 10px;
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            background: none;
-            color: #2d3748;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
+            padding: 16px 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #edf2f7;
         }
 
-        .context-menu .menu-item:first-child {
-            border-radius: 8px 8px 0 0;
-        }
-
-        .context-menu .menu-item:last-child {
-            border-radius: 0 0 8px 8px;
-        }
-
-        .context-menu .menu-item:hover {
-            background-color: #f0f4f8;
-            color: #667eea;
-        }
-
-        .context-menu .delete-item:hover {
-            color: #dc2626;
-        }
-
-        .card-description {
+        .edit-btn, .delete-btn {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
             color: #4a5568;
+            padding: 10px 12px;
+            border-radius: 8px;
             font-size: 13px;
-            margin-top: 10px;
-            line-height: 1.4;
+            cursor: pointer;
         }
 
-        .card-meta {
-            color: #a0aec0;
-            font-size: 12px;
-            margin-top: 8px;
+        .delete-btn:hover {
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        .edit-btn:hover {
+            color: #667eea;
+            border-color: #667eea;
         }
 
         .empty-state {
@@ -327,6 +272,92 @@ function addDocumentStyles() {
             background-color: #f8fafc;
             border: 1px dashed #cbd5e0;
             border-radius: 12px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-card h3 {
+            margin-bottom: 16px;
+            color: #2d3748;
+        }
+
+        .modal-label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2d3748;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            font-size: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
+        .btn-cancel, .btn-submit {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background-color: #e2e8f0;
+            color: #2d3748;
+        }
+
+        .btn-submit {
+            background-color: #667eea;
+            color: #ffffff;
+        }
+
+        .passport-icon {
+            background-color: #e3f2fd;
+            color: #1e88e5;
+        }
+
+        .bank-icon {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .contract-icon {
+            background-color: #fce4ec;
+            color: #c2185b;
+        }
+
+        .vehicle-icon {
+            background-color: #fff3e0;
+            color: #e65100;
         }
 
         .medical-icon {
@@ -342,6 +373,26 @@ function addDocumentStyles() {
         .general-icon {
             background-color: #f3f4f6;
             color: #4b5563;
+        }
+
+        .tag.identity {
+            background-color: #e3f2fd;
+            color: #1e88e5;
+        }
+
+        .tag.financial {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .tag.legal {
+            background-color: #fce4ec;
+            color: #c2185b;
+        }
+
+        .tag.ownership {
+            background-color: #fff3e0;
+            color: #e65100;
         }
 
         .tag.medical {

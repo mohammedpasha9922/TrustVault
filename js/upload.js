@@ -4,13 +4,11 @@
 
 const ALLOWED_TYPES = [
     'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'text/plain',
+    'image/png',
     'image/jpeg',
-    'image/png'
+    'image/jpg'
 ];
-const ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'txt', 'jpg', 'jpeg', 'png'];
+const ALLOWED_EXTENSIONS = ['pdf', 'png', 'jpg', 'jpeg'];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const uploadState = {
@@ -122,7 +120,7 @@ function validateSelectedFile(file) {
     }
 
     if (!isAllowedFile(file)) {
-        return { valid: false, message: 'Invalid file type. Please upload PDF, DOC, DOCX, TXT, JPG, or PNG files.' };
+        return { valid: false, message: 'Please choose a valid image or PDF file.' };
     }
 
     return { valid: true, message: '' };
@@ -158,6 +156,7 @@ function setupFormSubmission() {
 
         const documentName = document.getElementById('docName').value.trim();
         const category = document.getElementById('docCategory').value;
+        const description = document.getElementById('docDescription').value.trim();
         const validation = validateUploadForm(uploadState.selectedFile, documentName, category);
 
         if (!validation.valid) {
@@ -168,14 +167,15 @@ function setupFormSubmission() {
         const formData = {
             id: Date.now(),
             fileName: uploadState.selectedFile.name,
+            fileType: uploadState.selectedFile.type || 'application/octet-stream',
+            size: uploadState.selectedFile.size,
             documentName: documentName,
             category: category,
-            description: document.getElementById('docDescription').value.trim(),
-            fileSize: uploadState.selectedFile.size,
-            uploadTime: new Date().toLocaleString()
+            description: description,
+            uploadedAt: new Date().toLocaleString('en-GB')
         };
 
-        saveUploadedDocument(formData);
+        TrustVaultStorage.saveDocument(formData);
         showUploadProgress(formData);
     });
 }
@@ -197,7 +197,7 @@ function showUploadProgress(formData) {
     const steps = [
         { progress: 25, message: 'Validating file...' },
         { progress: 55, message: 'Preparing upload...' },
-        { progress: 80, message: 'Saving document securely...' },
+        { progress: 80, message: 'Saving metadata securely...' },
         { progress: 100, message: 'Upload complete!' }
     ];
 
@@ -299,24 +299,11 @@ function setupFormValidation() {
     }
 
     docNameInput.addEventListener('blur', function () {
-        if (this.value.trim() === '') {
-            this.style.borderColor = '#dc2626';
-        } else {
-            this.style.borderColor = '#cbd5e0';
-        }
+        this.style.borderColor = this.value.trim() ? '#cbd5e0' : '#dc2626';
     });
 
     docCategorySelect.addEventListener('change', function () {
-        this.style.borderColor = '#cbd5e0';
+        this.style.borderColor = this.value ? '#cbd5e0' : '#dc2626';
     });
 }
 
-function saveUploadedDocument(formData) {
-    return TrustVaultStorage.saveDocument(formData);
-}
-
-function getUploadedDocuments() {
-    return TrustVaultStorage.getDocuments();
-}
-
-window.getUploadedDocuments = getUploadedDocuments;
