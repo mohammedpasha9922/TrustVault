@@ -2,7 +2,6 @@
 // UPLOAD PAGE FUNCTIONALITY
 // ============================================
 
-const STORAGE_KEY = 'trustVaultDocuments';
 const ALLOWED_TYPES = [
     'application/pdf',
     'application/msword',
@@ -274,14 +273,11 @@ function setupFormValidation() {
 }
 
 function saveUploadedDocument(formData) {
-    const documents = getUploadedDocuments();
-    documents.unshift(formData);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(documents));
+    return TrustVaultStorage.saveDocument(formData);
 }
 
 function getUploadedDocuments() {
-    const storedValue = localStorage.getItem(STORAGE_KEY);
-    return storedValue ? JSON.parse(storedValue) : [];
+    return TrustVaultStorage.getDocuments();
 }
 
 window.getUploadedDocuments = getUploadedDocuments;
