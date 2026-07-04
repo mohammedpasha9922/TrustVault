@@ -10,6 +10,8 @@ const ALLOWED_TYPES = [
     'image/jpeg',
     'image/png'
 ];
+const ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'txt', 'jpg', 'jpeg', 'png'];
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const uploadState = {
     selectedFile: null
@@ -80,8 +82,11 @@ function setupDragDropZone() {
 }
 
 function handleFileSelect(file) {
-    if (!isAllowedFile(file)) {
-        alert('Invalid file type. Please upload PDF, DOC, DOCX, TXT, JPG, or PNG files.');
+    const validation = validateSelectedFile(file);
+
+    if (!validation.valid) {
+        uploadState.selectedFile = null;
+        alert(validation.message);
         return;
     }
 
@@ -103,9 +108,29 @@ function handleFileSelect(file) {
     }
 }
 
+function validateSelectedFile(file) {
+    if (!file) {
+        return { valid: false, message: 'Please select a file to upload.' };
+    }
+
+    if (file.size === 0) {
+        return { valid: false, message: 'The selected file is empty. Please choose a valid document.' };
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+        return { valid: false, message: 'The selected file is too large. Please upload a document smaller than 5 MB.' };
+    }
+
+    if (!isAllowedFile(file)) {
+        return { valid: false, message: 'Invalid file type. Please upload PDF, DOC, DOCX, TXT, JPG, or PNG files.' };
+    }
+
+    return { valid: true, message: '' };
+}
+
 function isAllowedFile(file) {
     const extension = (file.name || '').split('.').pop().toLowerCase();
-    const extensionMatches = ['pdf', 'doc', 'docx', 'txt', 'jpg', 'jpeg', 'png'].includes(extension);
+    const extensionMatches = ALLOWED_EXTENSIONS.includes(extension);
     const typeMatches = ALLOWED_TYPES.includes(file.type);
     return extensionMatches || typeMatches;
 }
@@ -133,14 +158,10 @@ function setupFormSubmission() {
 
         const documentName = document.getElementById('docName').value.trim();
         const category = document.getElementById('docCategory').value;
+        const validation = validateUploadForm(uploadState.selectedFile, documentName, category);
 
-        if (!uploadState.selectedFile) {
-            alert('Please select a file to upload.');
-            return;
-        }
-
-        if (!documentName || !category) {
-            alert('Please enter a document name and choose a category.');
+        if (!validation.valid) {
+            alert(validation.message);
             return;
         }
 
@@ -249,6 +270,24 @@ function resetForm() {
     if (progressPercent) {
         progressPercent.textContent = '0%';
     }
+}
+
+function validateUploadForm(file, documentName, category) {
+    const fileValidation = validateSelectedFile(file);
+
+    if (!fileValidation.valid) {
+        return fileValidation;
+    }
+
+    if (!documentName.trim()) {
+        return { valid: false, message: 'Please enter a document name.' };
+    }
+
+    if (!category) {
+        return { valid: false, message: 'Please choose a category for the document.' };
+    }
+
+    return { valid: true, message: '' };
 }
 
 function setupFormValidation() {
