@@ -144,6 +144,21 @@ function formatFileSize(bytes) {
     return size.toFixed(index === 0 ? 0 : 1) + ' ' + units[index];
 }
 
+function createUploadId() {
+    return 'doc-' + Date.now() + '-' + Math.random().toString(16).slice(2, 8);
+}
+
+function getCurrentTimestamp() {
+    const now = new Date();
+    const datePart = now.toLocaleDateString('en-GB');
+    const timePart = now.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    return datePart + ' ' + timePart;
+}
+
 function setupFormSubmission() {
     const form = document.getElementById('uploadForm');
 
@@ -157,7 +172,7 @@ function setupFormSubmission() {
         const documentName = document.getElementById('docName').value.trim();
         const category = document.getElementById('docCategory').value;
         const description = document.getElementById('docDescription').value.trim();
-        const validation = validateUploadForm(uploadState.selectedFile, documentName, category);
+        const validation = validateUploadForm(uploadState.selectedFile, documentName, category, description);
 
         if (!validation.valid) {
             alert(validation.message);
@@ -165,18 +180,18 @@ function setupFormSubmission() {
         }
 
         const formData = {
-            id: Date.now(),
-            fileName: uploadState.selectedFile.name,
-            fileType: uploadState.selectedFile.type || 'application/octet-stream',
-            size: uploadState.selectedFile.size,
-            documentName: documentName,
+            id: createUploadId(),
+            name: documentName,
             category: category,
             description: description,
-            uploadedAt: new Date().toLocaleString('en-GB')
+            uploadDate: getCurrentTimestamp(),
+            fileName: uploadState.selectedFile.name,
+            fileType: uploadState.selectedFile.type || 'application/octet-stream',
+            size: uploadState.selectedFile.size
         };
 
         TrustVaultStorage.saveDocument(formData);
-        showUploadProgress(formData);
+        window.location.assign('documents.html');
     });
 }
 
@@ -231,7 +246,7 @@ function showSuccessMessage(formData) {
 
     uploadProgress.style.display = 'none';
     uploadSuccess.style.display = 'block';
-    successMessage.textContent = '"' + formData.documentName + '" has been saved to your TrustVault documents.';
+    successMessage.textContent = '"' + formData.name + '" has been saved to your TrustVault documents.';
 
     if (uploadMoreBtn) {
         uploadMoreBtn.addEventListener('click', resetForm);
@@ -272,7 +287,7 @@ function resetForm() {
     }
 }
 
-function validateUploadForm(file, documentName, category) {
+function validateUploadForm(file, documentName, category, description) {
     const fileValidation = validateSelectedFile(file);
 
     if (!fileValidation.valid) {
@@ -285,6 +300,10 @@ function validateUploadForm(file, documentName, category) {
 
     if (!category) {
         return { valid: false, message: 'Please choose a category for the document.' };
+    }
+
+    if (!description.trim()) {
+        return { valid: false, message: 'Please enter a document description.' };
     }
 
     return { valid: true, message: '' };

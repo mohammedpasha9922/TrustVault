@@ -7,22 +7,27 @@
 
     function getTimestamp() {
         const now = new Date();
-        return now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB', {
+        const datePart = now.toLocaleDateString('en-GB');
+        const timePart = now.toLocaleTimeString('en-GB', {
             hour: '2-digit',
             minute: '2-digit'
         });
+
+        return datePart + ' ' + timePart;
     }
 
     function normalizeDocument(documentData) {
+        const source = documentData || {};
+
         return {
-            id: documentData && documentData.id ? String(documentData.id) : createId(),
-            fileName: documentData && documentData.fileName ? documentData.fileName : 'document.pdf',
-            fileType: documentData && documentData.fileType ? documentData.fileType : '',
-            documentName: documentData && documentData.documentName ? documentData.documentName : 'Untitled Document',
-            category: documentData && documentData.category ? documentData.category : 'other',
-            description: documentData && documentData.description ? documentData.description : '',
-            size: documentData && documentData.size ? documentData.size : 0,
-            uploadedAt: documentData && documentData.uploadedAt ? documentData.uploadedAt : getTimestamp()
+            id: source.id ? String(source.id) : createId(),
+            name: source.name || source.documentName || source.fileName || 'Untitled Document',
+            category: source.category || 'other',
+            description: source.description || '',
+            uploadDate: source.uploadDate || source.uploadedAt || getTimestamp(),
+            fileName: source.fileName || source.name || 'document.pdf',
+            fileType: source.fileType || '',
+            size: source.size || 0
         };
     }
 
@@ -80,7 +85,7 @@
         }
 
         documents[targetIndex] = Object.assign({}, documents[targetIndex], updatedData, {
-            documentName: updatedData.documentName || documents[targetIndex].documentName,
+            name: updatedData.name || documents[targetIndex].name,
             category: updatedData.category || documents[targetIndex].category,
             description: updatedData.description !== undefined ? updatedData.description : documents[targetIndex].description
         });

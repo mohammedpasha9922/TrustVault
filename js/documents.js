@@ -35,11 +35,11 @@ function filterDocuments(documents, query) {
 
     return documents.filter(function (documentItem) {
         const haystack = [
-            documentItem.documentName,
-            documentItem.fileName,
-            documentItem.category,
-            documentItem.description,
-            documentItem.uploadedAt
+            documentItem.name || documentItem.documentName || documentItem.fileName || '',
+            documentItem.fileName || '',
+            documentItem.category || '',
+            documentItem.description || '',
+            documentItem.uploadDate || documentItem.uploadedAt || ''
         ].join(' ').toLowerCase();
 
         return haystack.includes(query);
@@ -55,7 +55,7 @@ function renderDocuments(documents) {
 
     grid.innerHTML = '';
 
-    if (!documents.length) {
+    if (!Array.isArray(documents) || !documents.length) {
         grid.innerHTML = '<div class="empty-state">No documents found. Upload one to get started.</div>';
         return;
     }
@@ -77,13 +77,13 @@ function createDocumentCard(documentItem) {
         '  </div>',
         '</div>',
         '<div class="card-body">',
-        '  <h3>' + escapeHtml(documentItem.documentName || documentItem.fileName) + '</h3>',
-        '  <p class="file-size">' + escapeHtml(documentItem.fileName) + ' • ' + formatFileSize(documentItem.size) + '</p>',
+        '  <h3>' + escapeHtml(documentItem.name || documentItem.documentName || documentItem.fileName) + '</h3>',
+        '  <p class="file-size">' + escapeHtml(documentItem.fileName || documentItem.name) + ' • ' + formatFileSize(documentItem.size) + '</p>',
         '  <div class="card-tags">',
         '    <span class="tag ' + categoryInfo.tagClass + '">' + categoryInfo.label + '</span>',
         '  </div>',
         documentItem.description ? '  <p class="card-description">' + escapeHtml(documentItem.description) + '</p>' : '',
-        '  <p class="card-meta">' + escapeHtml(documentItem.uploadedAt || '') + '</p>',
+        '  <p class="card-meta">Upload Date: ' + escapeHtml(documentItem.uploadDate || documentItem.uploadedAt || '') + '</p>',
         '</div>',
         '<div class="card-footer">',
         '  <button class="btn-action edit-btn" type="button" data-action="edit" data-id="' + documentItem.id + '">',
@@ -95,16 +95,23 @@ function createDocumentCard(documentItem) {
         '</div>'
     ].join('');
 
-    card.querySelector('.edit-btn').addEventListener('click', function () {
-        showEditModal(documentItem);
-    });
+    const editButton = card.querySelector('.edit-btn');
+    const deleteButton = card.querySelector('.delete-btn');
 
-    card.querySelector('.delete-btn').addEventListener('click', function () {
-        if (confirm('Delete this document?')) {
-            TrustVaultStorage.deleteDocument(documentItem.id);
-            renderDocuments(filterDocuments(TrustVaultStorage.getDocuments(), currentQuery));
-        }
-    });
+    if (editButton) {
+        editButton.addEventListener('click', function () {
+            showEditModal(documentItem);
+        });
+    }
+
+    if (deleteButton) {
+        deleteButton.addEventListener('click', function () {
+            if (confirm('Delete this document?')) {
+                TrustVaultStorage.deleteDocument(documentItem.id);
+                renderDocuments(filterDocuments(TrustVaultStorage.getDocuments(), currentQuery));
+            }
+        });
+    }
 
     return card;
 }
@@ -142,7 +149,7 @@ function showEditModal(documentItem) {
         '  <h3>Edit Document</h3>',
         '  <form id="editDocumentForm">',
         '    <label class="modal-label">Name</label>',
-        '    <input type="text" id="editDocumentName" class="form-input" value="' + escapeHtml(documentItem.documentName || documentItem.fileName) + '">',
+        '    <input type="text" id="editDocumentName" class="form-input" value="' + escapeHtml(documentItem.name || documentItem.documentName || documentItem.fileName) + '">',
         '    <label class="modal-label">Category</label>',
         '    <select id="editDocumentCategory" class="form-select">',
         '      <option value="identity" ' + (documentItem.category === 'identity' ? 'selected' : '') + '>Identity</option>',
@@ -188,7 +195,7 @@ function showEditModal(documentItem) {
         }
 
         TrustVaultStorage.updateDocument(documentItem.id, {
-            documentName: updatedName,
+            name: updatedName,
             category: updatedCategory,
             description: updatedDescription
         });
@@ -262,6 +269,19 @@ function addDocumentStyles() {
         .edit-btn:hover {
             color: #667eea;
             border-color: #667eea;
+        }
+
+        .card-description {
+            margin-top: 10px;
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .card-meta {
+            margin-top: 10px;
+            color: #718096;
+            font-size: 13px;
         }
 
         .empty-state {
