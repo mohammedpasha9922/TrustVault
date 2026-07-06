@@ -7,27 +7,78 @@
 
     function getTimestamp() {
         const now = new Date();
-        const datePart = now.toLocaleDateString('en-GB');
-        const timePart = now.toLocaleTimeString('en-GB', {
+        return now.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
         });
+    }
 
-        return datePart + ' ' + timePart;
+    function formatFileSize(value) {
+        if (!value || value === 0) {
+            return '0 Bytes';
+        }
+
+        if (typeof value === 'string' && /[a-zA-Z]/.test(value)) {
+            return value;
+        }
+
+        const bytes = Number(value);
+        if (Number.isNaN(bytes)) {
+            return '0 Bytes';
+        }
+
+        const units = ['Bytes', 'KB', 'MB', 'GB'];
+        const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+        const size = bytes / Math.pow(1024, index);
+        return size.toFixed(index === 0 ? 0 : 1) + ' ' + units[index];
+    }
+
+    function getMockFileSize(source) {
+        if (source && source.fileSize) {
+            return formatFileSize(source.fileSize);
+        }
+
+        if (source && source.size) {
+            return formatFileSize(source.size);
+        }
+
+        const fileName = String(source && (source.fileName || source.name || 'document.pdf'));
+        const extension = fileName.split('.').pop().toLowerCase();
+        const multiplier = extension === 'pdf' ? 2.4 : extension === 'png' ? 1.6 : extension === 'jpg' || extension === 'jpeg' ? 1.2 : 1.0;
+        return formatFileSize(Math.round(multiplier * 1024 * 1024));
+    }
+
+    function normalizeKeywords(keywords) {
+        if (Array.isArray(keywords)) {
+            return keywords.join(', ');
+        }
+
+        return String(keywords || '').trim();
     }
 
     function normalizeDocument(documentData) {
         const source = documentData || {};
+        const name = source.name || source.documentName || source.fileName || 'Untitled Document';
+        const category = source.category || 'other';
+        const description = source.description || '';
+        const keywords = normalizeKeywords(source.keywords);
+        const uploadDate = source.uploadDate || source.uploadedAt || getTimestamp();
+        const fileSize = source.fileSize || getMockFileSize(source);
 
         return {
             id: source.id ? String(source.id) : createId(),
-            name: source.name || source.documentName || source.fileName || 'Untitled Document',
-            category: source.category || 'other',
-            description: source.description || '',
-            uploadDate: source.uploadDate || source.uploadedAt || getTimestamp(),
-            fileName: source.fileName || source.name || 'document.pdf',
+            name: String(name),
+            category: String(category),
+            description: String(description),
+            keywords: String(keywords),
+            uploadDate: String(uploadDate),
+            fileSize: String(fileSize),
+            fileName: source.fileName || String(name),
             fileType: source.fileType || '',
-            size: source.size || 0
+            isFavorite: Boolean(source.isFavorite)
         };
     }
 
@@ -84,12 +135,31 @@
             return null;
         }
 
-        documents[targetIndex] = Object.assign({}, documents[targetIndex], updatedData, {
-            name: updatedData.name || documents[targetIndex].name,
-            category: updatedData.category || documents[targetIndex].category,
-            description: updatedData.description !== undefined ? updatedData.description : documents[targetIndex].description
+        const nextDocument = Object.assign({}, documents[targetIndex], updatedData, {
+            name: updatedData.name !== undefined ? String(updatedData.name) : documents[targetIndex].name,
+            category: updatedData.category !== undefined ? String(updatedData.category) : documents[targetIndex].category,
+            description: updatedData.description !== undefined ? String(updatedData.description) : documents[targetIndex].description,
+            keywords: updatedData.keywords !== undefined ? normalizeKeywords(updatedData.keywords) : documents[targetIndex].keywords,
+            fileSize: updatedData.fileSize !== undefined ? String(updatedData.fileSize) : documents[targetIndex].fileSize,
+            isFavorite: updatedData.isFavorite !== undefined ? Boolean(updatedData.isFavorite) : documents[targetIndex].isFavorite
         });
 
+        documents[targetIndex] = nextDocument;
+        persistDocuments(documents);
+        return nextDocument;
+    }
+
+    function toggleFavoriteDocument(id) {
+        const documents = readDocuments();
+        const targetIndex = documents.findIndex(function (documentItem) {
+            return String(documentItem.id) === String(id);
+        });
+
+        if (targetIndex === -1) {
+            return null;
+        }
+
+        documents[targetIndex].isFavorite = !documents[targetIndex].isFavorite;
         persistDocuments(documents);
         return documents[targetIndex];
     }
@@ -103,6 +173,8 @@
         getDocuments: getDocuments,
         deleteDocument: deleteDocument,
         updateDocument: updateDocument,
-        clearDocuments: clearDocuments
+        toggleFavoriteDocument: toggleFavoriteDocument,
+        clearDocuments: clearDocuments,
+        formatFileSize: formatFileSize
     };
 })(window);
