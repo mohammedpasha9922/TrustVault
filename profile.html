@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #f5f7fb; }
+        .profile-card { max-width: 600px; margin: 40px auto; background: white; border-radius: 16px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .profile-card h1 { margin-top: 0; }
+        .profile-row { margin: 16px 0; }
+        .profile-row strong { display: inline-block; width: 110px; color: #3853a4; }
+        .btn-logout { background: #dc3545; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <h1><i class="fa-solid fa-user"></i> Profile</h1>
+        <div class="profile-row"><strong>Username:</strong> <span id="profileUsername">-</span></div>
+        <div class="profile-row"><strong>Email:</strong> <span id="profileEmail">-</span></div>
+        <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
