@@ -6,16 +6,55 @@
     <title>TrustVault - Dashboard</title>
     <script src="js/auth.js"></script>
     <script>checkAuthStatus();</script>
-    <!-- FontAwesome لأيقونات احترافية وسريعة -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- ملفات الستايل -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #f4f7fb; color: #1f2937; }
+        .dashboard-shell { display: flex; min-height: 100vh; }
+        .sidebar { width: 260px; background: #0f172a; color: white; padding: 24px 18px; }
+        .sidebar-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; font-size: 20px; }
+        .sidebar-menu ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+        .sidebar-menu a { display: flex; align-items: center; gap: 10px; color: #e2e8f0; text-decoration: none; padding: 10px 12px; border-radius: 10px; }
+        .sidebar-menu a:hover, .sidebar-menu li.active a { background: #1d4ed8; color: white; }
+        .main-content { flex: 1; padding: 24px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .top-bar h1 { margin: 4px 0 0; font-size: 28px; }
+        .top-bar .eyebrow { margin: 0; color: #64748b; text-transform: uppercase; letter-spacing: 0.16em; font-size: 12px; }
+        .user-pill { display: flex; align-items: center; gap: 12px; background: white; padding: 10px 14px; border-radius: 999px; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08); }
+        .user-pill strong { display: block; }
+        .user-pill span { color: #64748b; font-size: 12px; }
+        .user-pill img { width: 42px; height: 42px; border-radius: 50%; }
+        .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .metric-card { background: linear-gradient(135deg, #ffffff, #f8fbff); border-radius: 16px; padding: 18px; box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06); }
+        .metric-card .metric-title { display: block; color: #64748b; font-size: 13px; margin-bottom: 10px; }
+        .metric-card strong { font-size: 28px; display: block; margin-bottom: 6px; }
+        .metric-card small { color: #64748b; }
+        .widgets-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; }
+        .widget-card { background: white; border-radius: 16px; padding: 18px; box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06); }
+        .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .widget-header h3 { margin: 0; font-size: 18px; }
+        .widget-header a, .widget-header .badge { color: #2563eb; text-decoration: none; font-size: 13px; }
+        .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
+        .list-item:last-child { border-bottom: none; }
+        .list-item strong { display: block; font-size: 14px; }
+        .list-item span { color: #64748b; font-size: 12px; }
+        .list-item button { border: none; border-radius: 999px; background: #dbeafe; color: #1d4ed8; padding: 6px 10px; cursor: pointer; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+        .calendar-day { text-align: center; padding: 8px 0; border-radius: 8px; background: #f8fafc; color: #334155; }
+        .calendar-day.active { background: #2563eb; color: white; }
+        .calendar-day.muted { opacity: 0.4; }
+        @media (max-width: 960px) {
+            .dashboard-shell { flex-direction: column; }
+            .sidebar { width: 100%; }
+            .metric-grid, .widgets-grid { grid-template-columns: 1fr; }
+            .top-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+    </style>
 </head>
 <body>
-
-    <div class="dashboard-container">
-        <!-- ✅ Sidebar -->
+    <div class="dashboard-shell">
         <aside class="sidebar">
             <div class="sidebar-brand">
                 <i class="fa-solid fa-shield-halved"></i>
@@ -25,103 +64,88 @@
                 <ul>
                     <li class="active"><a href="dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
                     <li><a href="documents.html"><i class="fa-solid fa-file-lines"></i> Documents</a></li>
-                    <li><a href="#"><i class="fa-solid fa-file-signature"></i> Contracts</a></li>
-                    <li><a href="#"><i class="fa-solid fa-comments"></i> Chat</a></li>
-                    <li><a href="#"><i class="fa-solid fa-bell"></i> Notifications</a></li>
-                    <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                    <li><a href="upload.html"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</a></li>
+                    <li><a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
                 </ul>
             </nav>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="main-content">
-            <!-- 🔍 Top Bar (Search & User Profile) -->
             <header class="top-bar">
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="search" placeholder="Search files, contracts, or users...">
+                <div>
+                    <p class="eyebrow">Investor overview</p>
+                    <h1>TrustVault Dashboard</h1>
                 </div>
-                <div class="user-wrapper">
-                    <div class="user-info">
-                        <h4>User Name</h4>
-                        <small>Administrator</small>
+                <div class="user-pill">
+                    <div>
+                        <strong id="dashboardUserName">Loading...</strong>
+                        <span>Secure workspace</span>
                     </div>
-                    <!-- صورة مستخدم افتراضية لحين وضع صورتك الخاصة في مجلد assets -->
-                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User Profile" class="user-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Investor&background=0D8ABC&color=fff" alt="User Profile">
                 </div>
             </header>
 
-            <!-- 📊 Main Content Inner -->
-            <div class="content-body">
-                <!-- 4 Cards -->
-                <section class="cards-grid">
-                    <div class="card">
-                        <div class="card-icon doc-icon"><i class="fa-solid fa-file-lines"></i></div>
-                        <div class="card-info">
-                            <h3>124</h3>
-                            <p>Documents</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon contract-icon"><i class="fa-solid fa-file-signature"></i></div>
-                        <div class="card-info">
-                            <h3>42</h3>
-                            <p>Contracts</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon alert-icon"><i class="fa-solid fa-bell"></i></div>
-                        <div class="card-info">
-                            <h3>8</h3>
-                            <p>Notifications</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon user-icon"><i class="fa-solid fa-users"></i></div>
-                        <div class="card-info">
-                            <h3>15</h3>
-                            <p>Users</p>
-                        </div>
-                    </div>
-                </section>
+            <section class="metric-grid">
+                <div class="metric-card">
+                    <span class="metric-title">Total Contracts</span>
+                    <strong id="metricContracts">0</strong>
+                    <small id="metricContractsMeta">Ready for review</small>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-title">Total Documents</span>
+                    <strong id="metricDocuments">0</strong>
+                    <small id="metricDocumentsMeta">Stored locally</small>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-title">Active Alerts</span>
+                    <strong id="metricAlerts">0</strong>
+                    <small id="metricAlertsMeta">Needs attention</small>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-title">Recent Activity</span>
+                    <strong id="metricActivity">--</strong>
+                    <small id="metricActivityMeta">Last update</small>
+                </div>
+            </section>
 
-                <!-- 📑 Table (Latest Contracts) -->
-                <section class="table-container">
-                    <div class="table-header">
-                        <h3>Latest Contracts</h3>
-                        <a href="#" class="btn-view-all">View All</a>
+            <section class="widgets-grid">
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Recent Contracts</h3>
+                        <a href="documents.html">View all</a>
                     </div>
-                    <table class="dashboard-table">
-                        <thead>
-                            <tr>
-                                <th>Contract</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Material Supply Agreement</td>
-                                <td><span class="status status-signed">Signed</span></td>
-                                <td>2026-07-01</td>
-                            </tr>
-                            <tr>
-                                <td>Logistics Services Contract</td>
-                                <td><span class="status status-pending">Pending</span></td>
-                                <td>2026-06-28</td>
-                            </tr>
-                            <tr>
-                                <td>Partnership NDAs</td>
-                                <td><span class="status status-signed">Signed</span></td>
-                                <td>2026-06-25</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-            </div>
+                    <ul class="list" id="contractsList"></ul>
+                </div>
+
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Recent Files</h3>
+                        <a href="documents.html">Open docs</a>
+                    </div>
+                    <ul class="list" id="filesList"></ul>
+                </div>
+
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Calendar</h3>
+                        <span class="badge" id="calendarMonth">Month</span>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
+                </div>
+
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Alerts Summary</h3>
+                        <span class="badge">Live</span>
+                    </div>
+                    <ul class="list" id="alertsList"></ul>
+                </div>
+            </section>
         </main>
     </div>
 
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
 </html>
