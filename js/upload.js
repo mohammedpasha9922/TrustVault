@@ -183,6 +183,7 @@ function setupFormSubmission() {
         const category = document.getElementById('docCategory').value;
         const description = document.getElementById('docDescription').value.trim();
         const keywords = document.getElementById('docKeywords').value.trim();
+        const folder = document.getElementById('docFolder').value || 'Personal';
         const validation = validateUploadForm(uploadState.selectedFile, documentName, category, description);
 
         if (!validation.valid) {
@@ -199,7 +200,8 @@ function setupFormSubmission() {
             uploadDate: getCurrentTimestamp(),
             fileSize: getFileSizeLabel(uploadState.selectedFile),
             fileName: uploadState.selectedFile.name,
-            fileType: uploadState.selectedFile.type || 'application/octet-stream'
+            fileType: uploadState.selectedFile.type || 'application/octet-stream',
+            folder: folder
         };
 
         TrustVaultStorage.saveDocument(formData);

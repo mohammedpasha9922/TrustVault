@@ -1,5 +1,6 @@
 (function (global) {
     const STORAGE_KEY = 'trustVaultDocuments';
+    const DEFAULT_FOLDERS = ['Personal', 'Business', 'Government', 'Banking', 'Family', 'Archive'];
 
     function createId() {
         return 'doc-' + Date.now() + '-' + Math.random().toString(16).slice(2, 8);
@@ -59,6 +60,15 @@
         return String(keywords || '').trim();
     }
 
+    function normalizeFolder(folderValue) {
+        const normalized = String(folderValue || '').trim();
+        if (!normalized) {
+            return 'Personal';
+        }
+
+        return DEFAULT_FOLDERS.indexOf(normalized) !== -1 ? normalized : normalized;
+    }
+
     function normalizeDocument(documentData) {
         const source = documentData || {};
         const name = source.name || source.documentName || source.fileName || 'Untitled Document';
@@ -78,7 +88,8 @@
             fileSize: String(fileSize),
             fileName: source.fileName || String(name),
             fileType: source.fileType || '',
-            isFavorite: Boolean(source.isFavorite)
+            isFavorite: Boolean(source.isFavorite),
+            folder: normalizeFolder(source.folder)
         };
     }
 
@@ -141,7 +152,8 @@
             description: updatedData.description !== undefined ? String(updatedData.description) : documents[targetIndex].description,
             keywords: updatedData.keywords !== undefined ? normalizeKeywords(updatedData.keywords) : documents[targetIndex].keywords,
             fileSize: updatedData.fileSize !== undefined ? String(updatedData.fileSize) : documents[targetIndex].fileSize,
-            isFavorite: updatedData.isFavorite !== undefined ? Boolean(updatedData.isFavorite) : documents[targetIndex].isFavorite
+            isFavorite: updatedData.isFavorite !== undefined ? Boolean(updatedData.isFavorite) : documents[targetIndex].isFavorite,
+            folder: updatedData.folder !== undefined ? normalizeFolder(updatedData.folder) : documents[targetIndex].folder
         });
 
         documents[targetIndex] = nextDocument;
@@ -164,8 +176,42 @@
         return documents[targetIndex];
     }
 
+    function renameDocument(id, newName) {
+        return updateDocument(id, { name: newName });
+    }
+
+    function moveDocument(id, folder) {
+        return updateDocument(id, { folder: folder });
+    }
+
+    function copyDocument(id, folder) {
+        const documents = readDocuments();
+        const sourceDocument = documents.find(function (documentItem) {
+            return String(documentItem.id) === String(id);
+        });
+
+        if (!sourceDocument) {
+            return null;
+        }
+
+        const nextDocument = Object.assign({}, sourceDocument, {
+            id: createId(),
+            name: 'Copy of ' + (sourceDocument.name || sourceDocument.fileName || 'Document'),
+            uploadDate: getTimestamp(),
+            folder: normalizeFolder(folder || sourceDocument.folder || 'Personal')
+        });
+
+        documents.unshift(nextDocument);
+        persistDocuments(documents);
+        return nextDocument;
+    }
+
     function clearDocuments() {
         localStorage.removeItem(STORAGE_KEY);
+    }
+
+    function getDefaultFolders() {
+        return DEFAULT_FOLDERS.slice();
     }
 
     global.TrustVaultStorage = {
@@ -174,7 +220,11 @@
         deleteDocument: deleteDocument,
         updateDocument: updateDocument,
         toggleFavoriteDocument: toggleFavoriteDocument,
+        renameDocument: renameDocument,
+        moveDocument: moveDocument,
+        copyDocument: copyDocument,
         clearDocuments: clearDocuments,
-        formatFileSize: formatFileSize
+        formatFileSize: formatFileSize,
+        getDefaultFolders: getDefaultFolders
     };
 })(window);
